@@ -1,47 +1,52 @@
 import * as React from "react";
+import { useState, useEffect } from "react";
 import DoctorCard from "./DoctorCard.jsx";
 
 function DoctorsSection() {
-  const doctors = [
-    // {
-    //   imageSrc: "src/assets/DoctorJohny.png", // Added Doctor Johny's image
-    //   doctorName: "Dr. Johnny",
-    //   specialty: "Cardiology",
-    // },
-    // {
-    //   imageSrc:
-    //     "https://cdn.builder.io/api/v1/image/assets/471bd1fc3ea94fc0a67c95e5f4cf0712/a2babe5b78d3fcc814ecc3ed30c9cac800dfa2e6fd79dd1be8d530d26a4da2cf?apiKey=471bd1fc3ea94fc0a67c95e5f4cf0712&",
-    //   doctorName: "Dr. Michael Williams",
-    //   specialty: "Psychology",
-    // },
-    {
-      imageSrc:
-        "https://cdn.builder.io/api/v1/image/assets/471bd1fc3ea94fc0a67c95e5f4cf0712/b33f71bdf398572dcf1c09532216e3bec0185ae7b3910aa1832572354bbecb53?apiKey=471bd1fc3ea94fc0a67c95e5f4cf0712&",
-      doctorName: "Dr. Emily Johnson",
-      specialty: "Neurology",
-    },
-    {
-      imageSrc:
-        "https://cdn.builder.io/api/v1/image/assets/471bd1fc3ea94fc0a67c95e5f4cf0712/04394c99a0d2e91e70a2df69c6d55dec5338591624bb7ed680e3325adea6c026?apiKey=471bd1fc3ea94fc0a67c95e5f4cf0712&",
-      doctorName: "Dr. James Smith",
-      specialty: "Cardiology",
-    },
-    {
-      imageSrc:
-        "https://cdn.builder.io/api/v1/image/assets/471bd1fc3ea94fc0a67c95e5f4cf0712/a2babe5b78d3fcc814ecc3ed30c9cac800dfa2e6fd79dd1be8d530d26a4da2cf?apiKey=471bd1fc3ea94fc0a67c95e5f4cf0712&",
-      doctorName: "Dr. Michael Williams",
-      specialty: "Psychology",
-    },
-  ];
+  const [doctors, setDoctors] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    fetchDoctors();
+  }, []);
+
+  const fetchDoctors = async () => {
+    try {
+      const response = await fetch('http://localhost:8083/api/doctors');
+      if (!response.ok) {
+        throw new Error('Failed to fetch doctors');
+      }
+      const data = await response.json();
+      setDoctors(data);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <>
       <section className="doctors-section">
         <h2 className="section-title">Our Doctors</h2>
         <div className="doctors-grid">
-          {doctors.map((doctor, index) => (
-            <DoctorCard key={index} {...doctor} />
-          ))}
+          {loading ? (
+            <p>Loading doctors...</p>
+          ) : error ? (
+            <p>Error: {error}</p>
+          ) : doctors.length > 0 ? (
+            doctors.map((doctor, index) => (
+              <DoctorCard
+                key={doctor.id || index}
+                imageSrc={doctor.imageUrl}
+                doctorName={doctor.name}
+                specialty={doctor.specialty}
+              />
+            ))
+          ) : (
+            <p>No doctors found.</p>
+          )}
         </div>
       </section>
       <style jsx>{`
