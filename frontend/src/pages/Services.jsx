@@ -1,10 +1,10 @@
 import * as React from "react";
-// import Header from "./home/Header";
-// import Navbar from "./home/Navbar";
-// import Footer from "./home/Footer";
+// import Header from "./HOME/Header";
+// import Navbar from "./HOME/Navbar";
+// import Footer from "./HOME/Footer";
 import MedicalServices from "./services/MedicalServices";
-// import ServicesSection from "./home/ServicesSection"; // Added for consistency
-// import AppointmentForm from "./home/AppointmentForm"; // Added for consistency
+// import ServicesSection from "./HOME/ServicesSection"; // Added for consistency
+// import AppointmentForm from "./HOME/AppointmentForm"; // Added for consistency
 
 function Services() {
   return (
