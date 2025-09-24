@@ -15,7 +15,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/users")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "*")
 public class UserController {
 
     @Autowired
@@ -27,6 +27,10 @@ public class UserController {
             @RequestParam("email") String email,
             @RequestParam("password") String password,
             @RequestParam("role") String role,
+            @RequestParam(value = "phoneNumber", required = false) String phoneNumber,
+            @RequestParam(value = "address", required = false) String address,
+            @RequestParam(value = "gender", required = false) String gender,
+            @RequestParam(value = "age", required = false) String age,
             @RequestParam(value = "profilePhoto", required = false) MultipartFile profilePhoto) {
 
         if (userRepository.existsByEmail(email)) {
@@ -61,6 +65,24 @@ public class UserController {
         user.setProfilePhoto(fileName);
         user.setStatus("Offline");
         user.setZone("N/A");
+
+        // Set additional fields if provided
+        if (phoneNumber != null && !phoneNumber.trim().isEmpty()) {
+            user.setPhoneNumber(phoneNumber);
+        }
+        if (address != null && !address.trim().isEmpty()) {
+            user.setAddress(address);
+        }
+        if (gender != null && !gender.trim().isEmpty()) {
+            user.setGender(gender);
+        }
+        if (age != null && !age.trim().isEmpty()) {
+            try {
+                user.setAge(Integer.parseInt(age));
+            } catch (NumberFormatException e) {
+                // Ignore invalid age values
+            }
+        }
 
         User savedUser = userRepository.save(user);
         return ResponseEntity.ok(savedUser);

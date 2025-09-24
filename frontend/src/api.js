@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 // Base URLs for different APIs
-const USER_API_BASE_URL = 'http://localhost:8091/api/users'; // Base URL for user-related APIs
-const BOOKING_API_BASE_URL = 'http://localhost:8091/api/bookings'; // Base URL for booking-related APIs
+const USER_API_BASE_URL = 'http://localhost:8083/api/users'; // Base URL for user-related APIs
+const BOOKING_API_BASE_URL = 'http://localhost:8083/api/bookings'; // Base URL for booking-related APIs
 
 // API functions to interact with the backend
 const userApi = {

@@ -35,9 +35,11 @@ function Login() {
       return false;
     }
 
-    if (!isLogin && (!username || !phoneNumber || !address || !gender || !age)) {
-      setMessage('Please fill in all required fields for signup.');
-      return false;
+    if (!isLogin) {
+      if (!username) {
+        setMessage('Please enter a username.');
+        return false;
+      }
     }
 
     return true;
@@ -114,9 +116,15 @@ function Login() {
       }
     } catch (error) {
       console.error('Error:', error);
-      setMessage(
-        error.response?.data?.message || 'Server error. Please try again later.'
-      );
+      if (error.response?.data) {
+        // Backend returned a specific error message
+        setMessage(error.response.data);
+      } else if (error.message) {
+        // Network or other error
+        setMessage('Connection error. Please check if the server is running.');
+      } else {
+        setMessage('An unexpected error occurred. Please try again.');
+      }
     } finally {
       setLoading(false);
     }

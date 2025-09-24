@@ -9,7 +9,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/doctors")
-@CrossOrigin(origins = "*") // Allow frontend to access
 public class DoctorController {
 
     @Autowired
